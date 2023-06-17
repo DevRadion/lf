@@ -1,5 +1,5 @@
-use crate::args::arg_param::ArgParam;
 use crate::args::arg_param::vec_join::Join;
+use crate::args::arg_param::ArgParam;
 
 pub(crate) trait ArgParamVec {
     fn get_value_for<'a>(
@@ -7,7 +7,7 @@ pub(crate) trait ArgParamVec {
         arg: &ArgParam,
         args: &'a Vec<ArgParam>,
     ) -> Result<&ArgParam, String>;
-    fn contains(&self, arg: ArgParam) -> bool;
+    fn contains_arg(&self, arg: ArgParam) -> bool;
 }
 
 impl ArgParamVec for Vec<ArgParam> {
@@ -32,7 +32,7 @@ impl ArgParamVec for Vec<ArgParam> {
         ));
     }
 
-    fn contains(&self, arg: ArgParam) -> bool {
+    fn contains_arg(&self, arg: ArgParam) -> bool {
         for _arg in self {
             if _arg.raw_value() == arg.raw_value() {
                 return true;

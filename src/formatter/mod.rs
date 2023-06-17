@@ -1,7 +1,7 @@
 use chrono::{DateTime, Local, TimeZone};
-use colored::{Color, ColoredString, Colorize, Styles};
 use colored::Color::TrueColor;
 use colored::Style;
+use colored::{Color, ColoredString, Colorize, Styles};
 
 use crate::file_system::file_system_entry::FileSystemEntry;
 use crate::file_system::file_system_entry_permission::FileSystemEntryPermission;
@@ -38,15 +38,25 @@ impl Format {
     }
 
     pub fn table_header() -> String {
-        let delimiter = "-".repeat(80);
-        format!("{delimiter}\n{:20} {:20} {:20} {:20}\n{delimiter}", "Permission", "Modified: Date", "Time", "Path")
+        let delimiter = "-".repeat(104);
+        format!(
+            "{delimiter}\n{:^70}\n{delimiter}\n{:20} {:20} {:20} {:20} {:20}\n{delimiter}",
+            "Modified", "Permission", "Date", "Time", "Size", "Path"
+        )
     }
 
     pub fn file_system_entry(entry: &FileSystemEntry, is_colored: bool) -> String {
         let formatted_permissions = Format::file_system_entry_permission(&entry.permissions);
         let time_string = Format::time(&entry.modified_date);
         let date_string = Format::date(&entry.modified_date);
-        let mut formatted = format!("{:20} {:20} {:20} {:20}", formatted_permissions, date_string, time_string, entry.path);
+        let mut formatted = format!(
+            "{:20} {:20} {:20} {:20} {:20}",
+            formatted_permissions,
+            date_string,
+            time_string,
+            entry.size.to_string() + " bytes",
+            entry.path
+        );
 
         if is_colored {
             let style = Format::get_style_for_entry(&entry.entry_type);
@@ -59,27 +69,26 @@ impl Format {
     /* Private */
     fn get_style_for_entry(entry_type: &FileSystemEntryType) -> FormatTextStyle {
         return match entry_type {
-            FileSystemEntryType::File => {
-                FormatTextStyle {
-                    foreground_color: Color::TrueColor { r: 0, g: 255, b: 136 },
-                    background_color: Option::None,
-                    style: Styles::Bold,
-                }
-            }
-            FileSystemEntryType::Directory => {
-                FormatTextStyle {
-                    foreground_color: Color::Green,
-                    background_color: Option::None,
-                    style: Styles::Bold,
-                }
-            }
-            FileSystemEntryType::Unknown => {
-                FormatTextStyle {
-                    foreground_color: Color::Red,
-                    background_color: Option::None,
-                    style: Styles::Bold,
-                }
-            }
+            FileSystemEntryType::File => FormatTextStyle {
+                foreground_color: Color::TrueColor {
+                    r: 0,
+                    g: 255,
+                    b: 136,
+                },
+                // None
+                background_color: Option::None,
+                style: Styles::Bold,
+            },
+            FileSystemEntryType::Directory => FormatTextStyle {
+                foreground_color: Color::Blue,
+                background_color: Option::None,
+                style: Styles::Bold,
+            },
+            FileSystemEntryType::Unknown => FormatTextStyle {
+                foreground_color: Color::Red,
+                background_color: Option::None,
+                style: Styles::Bold,
+            },
         };
     }
 

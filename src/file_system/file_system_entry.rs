@@ -1,4 +1,6 @@
+use std::cmp::Ordering;
 use std::fs::Metadata;
+use std::os::windows::fs::MetadataExt;
 
 use chrono::{Date, DateTime, Local};
 
@@ -11,6 +13,7 @@ pub(crate) struct FileSystemEntry {
     pub entry_type: FileSystemEntryType,
     pub permissions: Vec<FileSystemEntryPermission>,
     pub modified_date: DateTime<Local>,
+    pub size: u64,
 }
 
 impl FileSystemEntry {
@@ -26,6 +29,27 @@ impl FileSystemEntry {
             entry_type: FileSystemEntryType::from_metadata(metadata),
             permissions: FileSystemEntryPermission::from_metadata(metadata),
             modified_date: date,
+            size: metadata.file_size()
         };
+    }
+}
+
+impl Eq for FileSystemEntry {}
+
+impl PartialEq<Self> for FileSystemEntry {
+    fn eq(&self, other: &Self) -> bool {
+        self.path == other.path
+    }
+}
+
+impl PartialOrd<Self> for FileSystemEntry {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for FileSystemEntry {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.entry_type.get_ordering_id().cmp(&other.entry_type.get_ordering_id())
     }
 }
