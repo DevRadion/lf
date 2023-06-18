@@ -1,7 +1,8 @@
-use chrono::{DateTime, Local, TimeZone};
+use std::collections::HashMap;
+use std::ops::Deref;
+use chrono::{DateTime, Local};
 use colored::{Color, ColoredString, Colorize, Styles};
-use colored::Color::TrueColor;
-use colored::Style;
+use crate::args::arg_param::ArgParam;
 
 use crate::file_system::file_system_entry::FileSystemEntry;
 use crate::file_system::file_system_entry_permission::FileSystemEntryPermission;
@@ -62,6 +63,27 @@ impl Format {
             let style = Format::get_style_for_entry(&entry.entry_type);
             formatted = Format::apply_style(&formatted, &style).to_string();
         }
+
+        return formatted;
+    }
+
+    pub fn help_info(info: HashMap<ArgParam, String>) -> String {
+        let delimiter_size = 60;
+        let mut formatted = String::new();
+        // Add delimiter
+        formatted.push_str(("-".repeat(delimiter_size) + "\n").deref());
+        // Add usage/example info
+        formatted.push_str("Usage: lf [args...]\n");
+        formatted.push_str("Example: lf -d -v\n\n");
+
+        // Add args description
+        for (arg, description) in info {
+            let formatted_arg_info = format!("{arg}: {description}\n");
+            formatted.push_str(&formatted_arg_info);
+        }
+
+        // Add delimiter
+        formatted.push_str(("-".repeat(delimiter_size) + "\n").deref());
 
         return formatted;
     }

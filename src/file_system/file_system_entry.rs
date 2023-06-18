@@ -5,11 +5,10 @@ use std::os::macos::fs::MetadataExt;
 #[cfg(target_os = "windows")]
 use std::os::windows::fs::MetadataExt;
 
-use chrono::{Date, DateTime, Local};
+use chrono::{DateTime, Local};
 
 use crate::file_system::file_system_entry_permission::FileSystemEntryPermission;
 use crate::file_system::file_system_entry_type::FileSystemEntryType;
-use crate::formatter::Format;
 
 pub(crate) struct FileSystemEntry {
     pub path: String,
