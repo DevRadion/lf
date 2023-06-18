@@ -1,5 +1,8 @@
 use std::cmp::Ordering;
 use std::fs::Metadata;
+#[cfg(target_os = "macos")]
+use std::os::macos::fs::MetadataExt;
+#[cfg(target_os = "windows")]
 use std::os::windows::fs::MetadataExt;
 
 use chrono::{Date, DateTime, Local};
@@ -24,12 +27,16 @@ impl FileSystemEntry {
             date = DateTime::from(modified_date)
         }
 
+        let file_size: u64;
+        #[cfg(target_os = "macos")] { file_size = metadata.len() }
+        #[cfg(target_os = "windows")] { file_size = metadata.file_size() }
+
         return FileSystemEntry {
             path: path,
             entry_type: FileSystemEntryType::from_metadata(metadata),
             permissions: FileSystemEntryPermission::from_metadata(metadata),
             modified_date: date,
-            size: metadata.file_size(),
+            size: file_size,
         };
     }
 }
