@@ -1,4 +1,4 @@
-# lf - List file
+# lf - Colorful ls
 A powerful cross-platform replacement for the "ls" command written in pure Rust
 
 ## Example
