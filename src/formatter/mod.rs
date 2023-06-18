@@ -1,7 +1,7 @@
 use chrono::{DateTime, Local, TimeZone};
+use colored::{Color, ColoredString, Colorize, Styles};
 use colored::Color::TrueColor;
 use colored::Style;
-use colored::{Color, ColoredString, Colorize, Styles};
 
 use crate::file_system::file_system_entry::FileSystemEntry;
 use crate::file_system::file_system_entry_permission::FileSystemEntryPermission;

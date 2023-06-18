@@ -1,8 +1,3 @@
-use std::fmt::Formatter;
-use std::fs::FileType;
-
-use colored::Colorize;
-
 use crate::formatter::Format;
 use crate::{
     args::arg_param::arg_param_vec::ArgParamVec, args::arg_param::ArgParam,
@@ -34,7 +29,7 @@ fn main() {
     let is_show_dir_only = arguments.contains_arg(ArgParam::ShowDirectoriesOnly);
     let is_show_files_only = arguments.contains_arg(ArgParam::ShowFilesOnly);
     paths.sort();
-    for path in paths {
+    for path in &paths {
         if is_show_dir_only && path.entry_type == FileSystemEntryType::Directory
             || is_show_files_only && path.entry_type == FileSystemEntryType::File
             || !is_show_dir_only && !is_show_files_only
@@ -42,5 +37,9 @@ fn main() {
             let formatted_entry = Format::file_system_entry(&path, true);
             println!("{formatted_entry}");
         }
+    }
+
+    if paths.iter().count() > 20 {
+        println!("{}", table_header);
     }
 }

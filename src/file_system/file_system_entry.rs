@@ -29,7 +29,7 @@ impl FileSystemEntry {
             entry_type: FileSystemEntryType::from_metadata(metadata),
             permissions: FileSystemEntryPermission::from_metadata(metadata),
             modified_date: date,
-            size: metadata.file_size()
+            size: metadata.file_size(),
         };
     }
 }

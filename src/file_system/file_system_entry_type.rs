@@ -1,4 +1,5 @@
 use std::fs::Metadata;
+
 use crate::file_system::file_system_entry_type::FileSystemEntryType::File;
 
 pub(crate) enum FileSystemEntryType {
@@ -38,7 +39,7 @@ impl FileSystemEntryType {
 
     pub fn get_ordering_id(&self) -> i8 {
         if self.raw_value() == File.raw_value() {
-            return 1
+            return 1;
         } else {
             return 0;
         }

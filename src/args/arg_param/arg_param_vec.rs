@@ -1,5 +1,5 @@
-use crate::args::arg_param::vec_join::Join;
 use crate::args::arg_param::ArgParam;
+use crate::args::arg_param::vec_join::Join;
 
 pub(crate) trait ArgParamVec {
     fn get_value_for<'a>(
