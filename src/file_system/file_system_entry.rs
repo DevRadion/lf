@@ -26,17 +26,18 @@ impl FileSystemEntry {
             date = DateTime::from(modified_date)
         }
 
-        let file_size: u64;
+        let mut file_size: u64 = 0;
         #[cfg(target_os = "macos")] { file_size = metadata.len() }
         #[cfg(target_os = "windows")] { file_size = metadata.file_size() }
+        #[cfg(target_os = "linux")] { file_size = metadata.len() }
 
-        return FileSystemEntry {
-            path: path,
+        FileSystemEntry {
+            path,
             entry_type: FileSystemEntryType::from_metadata(metadata),
             permissions: FileSystemEntryPermission::from_metadata(metadata),
             modified_date: date,
             size: file_size,
-        };
+        }
     }
 }
 
